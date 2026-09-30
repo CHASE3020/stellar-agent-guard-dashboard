@@ -2,7 +2,7 @@
 
 import { deadManRemaining, describePolicy, isDeadManFrozen } from "stellar-agent-guard-sdk";
 import { useGuard } from "./GuardProvider.tsx";
-import { ErrorBlock, Read, Stat, relativeTime, short } from "./bits.tsx";
+import { ErrorBlock, Read, Stat, TimeAgo, short } from "./bits.tsx";
 import { PHASE1_ARTIFACT, NETWORK } from "../lib/guard/network.ts";
 import { compilePrintReport } from "../lib/guard/printReport.ts";
 import { calculateVelocity } from "../lib/guard/velocity.ts";
@@ -28,7 +28,7 @@ export function StatusPanel() {
         <h2 style={{ margin: 0 }}>On-chain state</h2>
 
         <div className="row">
-          {snapshot && <span className="tiny muted">read {relativeTime(snapshot.fetchedAt)}</span>}
+          {snapshot && <span className="tiny muted">read <TimeAgo iso={snapshot.fetchedAt} suffix=" ago" /></span>}
           <button className="secondary no-print" onClick={() => window.print()}>
             Print Compliance Report
           </button>

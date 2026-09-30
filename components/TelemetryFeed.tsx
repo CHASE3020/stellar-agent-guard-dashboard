@@ -7,7 +7,7 @@ import { STREAM_BUFFER_LIMIT } from "../lib/guard/telemetry.ts";
 import { eventKey, useGuard, useGuardEvents } from "./GuardProvider.tsx";
 import { TelemetryAlerts } from "./TelemetryAlerts.tsx";
 import { TelemetryChart } from "./TelemetryChart.tsx";
-import { ErrorBlock, relativeTime, short, starLink } from "./bits.tsx";
+import { ErrorBlock, TimeAgo, short, starLink } from "./bits.tsx";
 import { DateRangePicker } from "./DateRangePicker.tsx";
 import type { RangePreset, TimeRange } from "../lib/guard/ledgerTime.ts";
 import {
@@ -275,7 +275,7 @@ export function TelemetryFeed() {
         Tailed from Soroban RPC&apos;s <code>getEvents</code> with a cursor, so no event is delivered
         twice and none is skipped between polls. Soroban has no push stream — the floor on latency is
         the ledger close interval (roughly 5s), not the 5s poll.
-        {feed.lastPolledAt && ` Last poll ${relativeTime(feed.lastPolledAt)}.`}
+        {feed.lastPolledAt && <> Last poll <TimeAgo iso={feed.lastPolledAt} suffix=" ago" />.</>}
       </p>
 
       <div className="notice info">
@@ -314,7 +314,7 @@ export function TelemetryFeed() {
                 <th>Event</th>
                 <th>Decision</th>
                 <th>Source</th>
-                <th>Ledger</th>
+                <th>Time</th>
                 <th>Transaction</th>
               </tr>
             </thead>
@@ -352,7 +352,10 @@ export function TelemetryFeed() {
  * event prepending shifts nothing, and no row is ever unmounted and rebuilt
  * merely because rows above it changed.
  */
-const TelemetryRow = memo(function TelemetryRow({ event }: { event: GuardEvent }) {
+import type { TelemetryEvent } from "../lib/guard/telemetry.ts";
+
+const TelemetryRow = memo(function TelemetryRow({ event }: { event: TelemetryEvent }) {
+  const iso = event.ledgerClosedAt ?? event.observedAt ?? null;
   return (
     <tr>
       <td>
@@ -376,7 +379,10 @@ const TelemetryRow = memo(function TelemetryRow({ event }: { event: GuardEvent }
       <td>
         <span className={`pill${event.source === "diagnostic" ? " warn" : ""}`}>{event.source}</span>
       </td>
-      <td className="mono tiny">{event.ledger ?? "—"}</td>
+      <td className="mono tiny">
+        {iso ? <TimeAgo iso={iso} /> : "—"}
+        {event.ledger ? <div className="muted" style={{ marginTop: 2 }}>L{event.ledger}</div> : null}
+      </td>
       <td>
         {event.transactionHash ? (
           starLink(event.transactionHash)
