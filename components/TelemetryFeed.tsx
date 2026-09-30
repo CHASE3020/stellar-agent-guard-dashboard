@@ -275,7 +275,7 @@ export function TelemetryFeed() {
         Tailed from Soroban RPC&apos;s <code>getEvents</code> with a cursor, so no event is delivered
         twice and none is skipped between polls. Soroban has no push stream — the floor on latency is
         the ledger close interval (roughly 5s), not the 5s poll.
-        {feed.lastPolledAt && <> Last poll <TimeAgo iso={feed.lastPolledAt} suffix=" ago" />.</>}
+        {feed.lastPolledAt && <> Last poll <TimeAgo iso={feed.lastPolledAt} />.</>}
       </p>
 
       <div className="notice info">

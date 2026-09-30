@@ -28,7 +28,7 @@ export function StatusPanel() {
         <h2 style={{ margin: 0 }}>On-chain state</h2>
 
         <div className="row">
-          {snapshot && <span className="tiny muted">read <TimeAgo iso={snapshot.fetchedAt} suffix=" ago" /></span>}
+          {snapshot && <span className="tiny muted">read <TimeAgo iso={snapshot.fetchedAt} /></span>}
           <button className="secondary no-print" onClick={() => window.print()}>
             Print Compliance Report
           </button>
