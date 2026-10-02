@@ -2,16 +2,7 @@
 
 import { deadManRemaining, describePolicy, isDeadManFrozen } from "stellar-agent-guard-sdk";
 import { useGuard } from "./GuardProvider.tsx";
-import { ErrorBlock, Read, Stat, TimeAgo, short } from "./bits.tsx";
-import {
-  ErrorBlock,
-  Read,
-  ReadSkeleton,
-  ReadWithRetry,
-  Stat,
-  relativeTime,
-  short,
-} from "./bits.tsx";
+import { ErrorBlock, Read, ReadSkeleton, ReadWithRetry, Stat, TimeAgo, short } from "./bits.tsx";
 import { CopyButton } from "./CopyButton.tsx";
 import { PHASE1_ARTIFACT, NETWORK } from "../lib/guard/network.ts";
 import { compilePrintReport } from "../lib/guard/printReport.ts";
@@ -101,24 +92,10 @@ export function StatusPanel() {
           <button className="secondary no-print" onClick={() => void refresh()} disabled={refreshing}>
             {refreshing ? "Reading…" : "Refresh"}
           </button>
-          <div className="row">
-            {snapshot && (
-              <span className="tiny muted">read {relativeTime(snapshot.fetchedAt)}</span>
-            )}
-            <button className="secondary no-print" onClick={() => window.print()}>
-              Print Compliance Report
-            </button>
-            <button
-              className="secondary no-print"
-              onClick={() => void refresh()}
-              disabled={refreshing}
-            >
-              {refreshing ? "Reading…" : "Refresh"}
-            </button>
-          </div>
         </div>
+      </div>
 
-        <p className="tiny muted" style={{ marginTop: 10 }}>
+      <p className="tiny muted" style={{ marginTop: 10 }}>
           <span className="mono">{guard}</span> <CopyButton value={guard} label="guard address" />
         </p>
 

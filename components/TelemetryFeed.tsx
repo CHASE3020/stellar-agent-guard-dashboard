@@ -7,8 +7,7 @@ import { STREAM_BUFFER_LIMIT } from "../lib/guard/telemetry.ts";
 import { useGuard, useGuardEvents } from "./GuardProvider.tsx";
 import { TelemetryAlerts } from "./TelemetryAlerts.tsx";
 import { TelemetryChart } from "./TelemetryChart.tsx";
-import { ErrorBlock, TimeAgo, short, starLink } from "./bits.tsx";
-import { ErrorBlock, relativeTime, short, starLink, TxHashCell } from "./bits.tsx";
+import { ErrorBlock, TimeAgo, short, starLink, TxHashCell } from "./bits.tsx";
 import { DateRangePicker } from "./DateRangePicker.tsx";
 import type { RangePreset, TimeRange } from "../lib/guard/ledgerTime.ts";
 import {
@@ -324,11 +323,7 @@ export function TelemetryFeed() {
         Tailed from Soroban RPC&apos;s <code>getEvents</code> with a cursor, so no event is delivered
         twice and none is skipped between polls. Soroban has no push stream — the floor on latency is
         the ledger close interval (roughly 5s), not the 5s poll.
-        {feed.lastPolledAt && <> Last poll <TimeAgo iso={feed.lastPolledAt} />.</>}
-        Tailed from Soroban RPC&apos;s <code>getEvents</code> with a cursor, so no event is
-        delivered twice and none is skipped between polls. Soroban has no push stream — the floor on
-        latency is the ledger close interval (roughly 5s), not the 5s poll.
-        {feed.lastPolledAt && ` Last poll ${relativeTime(feed.lastPolledAt)}.`}
+        {feed.lastPolledAt && <> Last poll <TimeAgo iso={feed.lastPolledAt} suffix=" ago" />.</>}
       </p>
 
       <div className="notice info">
