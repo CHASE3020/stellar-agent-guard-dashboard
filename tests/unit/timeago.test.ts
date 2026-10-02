@@ -1,6 +1,22 @@
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
-import { formatTimeAgo } from "../../lib/guard/time";
+import { describe, it, before, test } from "node:test";
+import { formatTimeAgo } from "../../lib/guard/time.ts";
+import { installDom, loadReact, type Act } from "./domHarness.ts";
+import { TimeAgo } from "../../components/bits.tsx";
+import fs from "node:fs/promises";
+
+installDom();
+
+let react: typeof import("react");
+let createRoot: typeof import("react-dom/client").createRoot;
+let act: Act;
+
+before(async () => {
+  const loaded = await loadReact();
+  react = loaded.react;
+  createRoot = loaded.createRoot;
+  act = loaded.act;
+});
 
 describe("formatTimeAgo", () => {
   const fixedNow = 1700000000n; // arbitrary deterministic "now"
@@ -42,4 +58,38 @@ describe("formatTimeAgo", () => {
     assert.equal(formatTimeAgo(fixedNowNum - 45, fixedNowNum), "45s");
     assert.equal(formatTimeAgo(fixedNowNum - 4000, fixedNowNum), "1h");
   });
+});
+
+test("<TimeAgo /> renders relative text and absolute ISO timestamp attributes", async () => {
+  const fixtureUrl = new URL("../fixtures/phase3-proof.json", import.meta.url);
+  const data = JSON.parse(await fs.readFile(fixtureUrl, "utf8"));
+  const iso = data.ranAt;
+
+  assert.equal(typeof iso, "string");
+
+  const container = document.createElement("div");
+  document.body.appendChild(container);
+
+  let root: ReturnType<typeof createRoot> | undefined;
+  await act(async () => {
+    root = createRoot(container);
+    root.render(react.createElement(TimeAgo, { iso }));
+  });
+
+  const timeEl = container.querySelector("time.timeago") as HTMLTimeElement;
+  assert.ok(timeEl, "a <time> element should be rendered");
+
+  assert.equal(timeEl.getAttribute("datetime"), iso);
+  assert.equal(timeEl.getAttribute("title"), iso);
+
+  const relText = timeEl.textContent;
+  assert.ok(
+    relText && /^(just now|\d+[smhd])$/.test(relText),
+    `Rendered text "${relText}" should match relative time format`,
+  );
+
+  await act(async () => {
+    root?.unmount();
+  });
+  container.remove();
 });

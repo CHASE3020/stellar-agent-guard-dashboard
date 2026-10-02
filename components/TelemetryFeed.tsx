@@ -320,10 +320,15 @@ export function TelemetryFeed() {
       </div>
 
       <p className="tiny muted" style={{ marginTop: 8 }}>
-        Tailed from Soroban RPC&apos;s <code>getEvents</code> with a cursor, so no event is delivered
-        twice and none is skipped between polls. Soroban has no push stream — the floor on latency is
-        the ledger close interval (roughly 5s), not the 5s poll.
-        {feed.lastPolledAt && <> Last poll <TimeAgo iso={feed.lastPolledAt} suffix=" ago" />.</>}
+        Tailed from Soroban RPC&apos;s <code>getEvents</code> with a cursor, so no event is
+        delivered twice and none is skipped between polls. Soroban has no push stream — the floor on
+        latency is the ledger close interval (roughly 5s), not the 5s poll.
+        {feed.lastPolledAt && (
+          <>
+            {" "}
+            Last poll <TimeAgo iso={feed.lastPolledAt} suffix=" ago" />.
+          </>
+        )}
       </p>
 
       <div className="notice info">
@@ -432,7 +437,11 @@ const TelemetryRow = memo(function TelemetryRow({ event }: { event: TelemetryEve
       </td>
       <td className="mono tiny">
         {iso ? <TimeAgo iso={iso} /> : "—"}
-        {event.ledger ? <div className="muted" style={{ marginTop: 2 }}>L{event.ledger}</div> : null}
+        {event.ledger ? (
+          <div className="muted" style={{ marginTop: 2 }}>
+            L{event.ledger}
+          </div>
+        ) : null}
       </td>
       <td>
         {event.transactionHash ? (

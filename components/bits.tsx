@@ -244,9 +244,10 @@ export function TimeAgo({ iso, suffix = "" }: { iso: string | null; suffix?: str
   const rel = formatTimeAgo(ts, nowSecs);
 
   return (
-    <span title={iso} className="timeago">
-      {rel}{suffix}
-    </span>
+    <time dateTime={iso} title={iso} className="timeago">
+      {rel}
+      {suffix}
+    </time>
   );
 }
 

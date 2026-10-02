@@ -1,6 +1,10 @@
-export function formatTimeAgo(timestampSeconds: bigint | number, nowSeconds: bigint | number): string {
-  const ts = typeof timestampSeconds === 'bigint' ? timestampSeconds : BigInt(Math.floor(timestampSeconds));
-  const now = typeof nowSeconds === 'bigint' ? nowSeconds : BigInt(Math.floor(nowSeconds));
+export function formatTimeAgo(
+  timestampSeconds: bigint | number,
+  nowSeconds: bigint | number,
+): string {
+  const ts =
+    typeof timestampSeconds === "bigint" ? timestampSeconds : BigInt(Math.floor(timestampSeconds));
+  const now = typeof nowSeconds === "bigint" ? nowSeconds : BigInt(Math.floor(nowSeconds));
   let diff = now - ts;
 
   if (diff < 0n) {

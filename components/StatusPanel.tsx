@@ -84,18 +84,26 @@ export function StatusPanel() {
         <div className="row" style={{ justifyContent: "space-between" }}>
           <h2 style={{ margin: 0 }}>On-chain state</h2>
 
-        <div className="row">
-          {snapshot && <span className="tiny muted">read <TimeAgo iso={snapshot.fetchedAt} /></span>}
-          <button className="secondary no-print" onClick={() => window.print()}>
-            Print Compliance Report
-          </button>
-          <button className="secondary no-print" onClick={() => void refresh()} disabled={refreshing}>
-            {refreshing ? "Reading…" : "Refresh"}
-          </button>
+          <div className="row">
+            {snapshot && (
+              <span className="tiny muted">
+                read <TimeAgo iso={snapshot.fetchedAt} />
+              </span>
+            )}
+            <button className="secondary no-print" onClick={() => window.print()}>
+              Print Compliance Report
+            </button>
+            <button
+              className="secondary no-print"
+              onClick={() => void refresh()}
+              disabled={refreshing}
+            >
+              {refreshing ? "Reading…" : "Refresh"}
+            </button>
+          </div>
         </div>
-      </div>
 
-      <p className="tiny muted" style={{ marginTop: 10 }}>
+        <p className="tiny muted" style={{ marginTop: 10 }}>
           <span className="mono">{guard}</span> <CopyButton value={guard} label="guard address" />
         </p>
 
